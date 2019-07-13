@@ -6,12 +6,15 @@ from django.http import JsonResponse
 import psycopg2
 conn = psycopg2.connect(database="postgres", user="postgres", host="db", port="5432")
 cur = conn.cursor()
-cur.execute('''DROP TABLE nba;''')
-conn.commit()
-cur.execute('''CREATE TABLE nba
-	       (index TEXT PRIMARY KEY     NOT NULL,
-	title  TEXT,
-	link  TEXT);''')
+
+try:
+	cur.execute('''DROP TABLE nba;''')
+	conn.commit()
+except:
+	pass
+conn = psycopg2.connect(database="postgres", user="postgres", host="db", port="5432")
+cur = conn.cursor()
+cur.execute('''CREATE TABLE nba(index TEXT PRIMARY KEY NOT NULL,title TEXT,link TEXT);''')
 conn.commit()
 from bs4 import BeautifulSoup
 import urllib
